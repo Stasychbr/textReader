@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1601075200 source:a:\codeblocksprojs\test\main.cpp
+	<tchar.h>
+	<windows.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"model.h"
+	"viewer.h"
+	"menu.h"
+
+1601043562 a:\codeblocksprojs\test\model.h
+
+1601070983 a:\codeblocksprojs\test\viewer.h
+	"model.h"
+	<windows.h>
+
+1601318849 source:a:\codeblocksprojs\test\model.cpp
+	<stdlib.h>
+	<stdio.h>
+	"model.h"
+
+1601070983 source:a:\codeblocksprojs\test\viewer.cpp
+	"viewer.h"
+	<stdlib.h>
+	<windows.h>
+	"model.h"
+
+1601074740 a:\codeblocksprojs\test\menu.h
+
+1601075456 source:a:\codeblocksprojs\test\menu.rc
+	"menu.h"
+

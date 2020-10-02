@@ -1,0 +1,22 @@
+int GetStringNumber(const char* text, HWND hwnd, HDC hdc) {
+    int counter = 1;
+    int lineLength = 0, curLine = 0;
+    int check = 0;
+    RECT rc = {0};
+    TEXTMETRIC tm = {0};
+    GetTextMetrics(hdc, &tm);
+    GetClientRect(hwnd, &rc);
+    lineLength = rc.right / tm.tmAveCharWidth;
+    while (*text) {
+        curLine++;
+        if (*text == '\n') {
+            counter++;// += 1 + curLine / lineLength;
+            if (curLine / lineLength > 0) {
+                check++;
+            }
+            curLine = 0;
+        }
+        text++;
+    }
+    return counter;
+}

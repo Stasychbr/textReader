@@ -1,0 +1,3 @@
+Hello, world! Some text to be displayed beneath the window's border
+str2
+str3
