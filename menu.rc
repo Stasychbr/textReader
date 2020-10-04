@@ -2,6 +2,12 @@
 
 IDC_APP1 MENU
 BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Open...", IDM_OPEN
+        MENUITEM "Close", IDM_CLOSE
+        MENUITEM "Exit", IDM_EXIT
+    END
     POPUP "Mode"
     BEGIN
         MENUITEM "Wrap words", IDM_MODE

@@ -4,18 +4,17 @@
 
 typedef enum viewMode {
     CUT_MODE,
-    CARRY_MODE,
+    WRAP_MODE,
 } viewMode;
 
 typedef struct viewer_t {
     HWND hwnd;
     HFONT font;
-    HBRUSH bcgrBrush;
     TEXTMETRIC tm;
-    int curStrNum;
-    int horShift;
-    int lineLength;
-    int pageSize;
+    UINT curStrNum;
+    UINT horShift;
+    UINT lineLength;
+    UINT pageSize; //height
     viewMode mode;
 } viewer_t;
 
@@ -36,3 +35,5 @@ void ShiftUp(viewer_t* viewer);
 void ShiftDown(viewer_t* viewer);
 
 void UpdatePageSize(viewer_t* viewer);
+
+void ChangeMode(viewer_t* viewer);
