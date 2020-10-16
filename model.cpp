@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include "model.h"
 
-char* ReadText(FILE* file, UINT* strNum) {
+char* ReadText(FILE* file, int* strNum) {
     char* text = NULL;
-    UINT size = 0, i;
-    int ch = 0;
+    int size = 0, i, ch = 0;
     fseek(file, 0, SEEK_END);
     size = ftell(file);
     text = (char*)malloc(size + 1);
@@ -13,19 +12,13 @@ char* ReadText(FILE* file, UINT* strNum) {
         return NULL;
     }
     fseek(file, 0, SEEK_SET);
-    //fread(text, sizeof(char), size, file);
-    for (i = 0; (ch = getc(file)) != EOF; i++) {
-        text[i] = (char) ch;
-        if (ch == '\n') {
-            (*strNum)++;
-        }
-    }
-    text[i] = 0;
+    fread(text, sizeof(char), size, file);
+    text[size] = 0;
     return text;
 }
 
-UINT GetStrNumber(const char* text) {
-    UINT counter = 1;
+int GetStrNumber(const char* text) {
+    int counter = 1;
     while (*text) {
         if (*text == '\n') {
             counter++;
@@ -36,54 +29,70 @@ UINT GetStrNumber(const char* text) {
 }
 
 model_t* InitModel(const char* fileName) {
-    FILE* file = fopen(fileName, "r");
+    FILE* file = fopen(fileName, "rb");
     model_t* model;
     char* text;
-    UINT sNum = 1;
-    UINT i, j = 0;
-    UINT* strSizes;
+    int sNum = 1, i = 0, j = 0;
+    int* strSizes;
     char** strings;
     if (!file) {
         return NULL;
     }
     text = ReadText(file, &sNum);
+    printf("%s", text);
     fclose(file);
     if (!text) {
         return NULL;
     }
+    while (text[i]) {
+        if (text[i++] == '\n') {
+            sNum++;
+        }
+    }
     model = (model_t*)malloc(sizeof(model_t));
-    strSizes = (UINT*)calloc(sNum, sizeof(UINT));
-    strings = (char**)malloc(sNum * sizeof(char*));
-    if (!strSizes || !model || !strings) {
+    strings = (char**)malloc((sNum + 1)* sizeof(char*));
+    if (!model || !strings) {
         free(text);
+        free(model);
+        free(strings);
         return NULL;
     }
     strings[0] = text;
+    strings[sNum] = text + i;
     for (i = 0; text[i]; i++) {
-        strSizes[j]++;
         if (text[i] == '\n') {
             strings[++j] = text + i + 1;
         }
     }
     model->strings = strings;
-    model->strSizes = strSizes;
     model->strNum = sNum;
     return model;
 }
 
-UINT GetMaxStrLen(model_t* model) {
-    UINT res = 0, i;
+int GetMaxStrLen(model_t* model) {
+    int res = 0, i, curLen;
     for (i = 0; i < model->strNum; i++) {
-        if (model->strSizes[i] > res) {
-            res = model->strSizes[i];
+        curLen = GetStrLen(model, i);
+        if (curLen > res) {
+            res = curLen;
         }
     }
     return res;
 }
 
+UINT GetStrLen(model_t* model, int ind) {
+    UINT len =  model->strings[ind + 1] - model->strings[ind];
+    if (ind < model->strNum - 1) {
+        return len - 1;
+    }
+    else if (ind == model->strNum - 1) {
+        return len;
+    }
+    return 0;
+}
+
 void DeleteModel(model_t* model) {
     free(model->strings[0]);
     free(model->strings);
-    free(model->strSizes);
     free(model);
 }

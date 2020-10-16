@@ -10,11 +10,12 @@ typedef enum viewMode {
 typedef struct viewer_t {
     HWND hwnd;
     HFONT font;
+    //HBRUSH bcgrBrush;
     TEXTMETRIC tm;
-    UINT curStrNum;
-    UINT horShift;
-    UINT lineLength;
-    UINT pageSize; //height
+    int curStrNum;
+    int horShift;
+    int lineLength;
+    int pageSize;
     viewMode mode;
 } viewer_t;
 

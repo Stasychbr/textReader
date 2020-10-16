@@ -31,3 +31,48 @@
 1601075456 source:a:\codeblocksprojs\test\menu.rc
 	"menu.h"
 
+1602795755 source:a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\main.cpp
+	<tchar.h>
+	<windows.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"model.h"
+	"viewer.h"
+	"menu.h"
+
+1602803282 a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\model.h
+	<windows.h>
+
+1602796194 a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\viewer.h
+	"model.h"
+	<windows.h>
+
+1602789948 a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\menu.h
+
+1602788802 source:a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\menu.rc
+	"menu.h"
+
+1602865261 source:a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\model.cpp
+	<stdlib.h>
+	<stdio.h>
+	"model.h"
+
+1602864986 source:a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\viewer.cpp
+	"viewer.h"
+	<stdlib.h>
+	<windows.h>
+	"model.h"
+	<math.h>
+
+1602865632 source:a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\controller.cpp
+	<windows.h>
+	"controller.h"
+	"model.h"
+	"viewer.h"
+	"menu.h"
+	<stdio.h>
+
+1602794260 a:\codeblocksprojs\textreader-666cf3f567c4d18f6576a89b2cadd08b7b320505\controller.h
+	<windows.h>
+

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include "model.h"
+#include <math.h>
 
 HFONT GetFont() {
     return CreateFont(0, 0, 0, 0, FW_MEDIUM, FALSE, FALSE, FALSE,
@@ -30,7 +31,6 @@ viewer_t* InitViewer(HWND hwnd) {
     UpdatePageSize(viewer);
     viewer->curStrNum = 0;
     viewer->horShift = 0;
-    ReleaseDC(hwnd, hdc);
     return viewer;
 }
 
@@ -62,47 +62,61 @@ void UpdatePageSize(viewer_t* viewer) {
 
 void Draw(HDC hdc, model_t* model, viewer_t* viewer) {
     RECT rc;
-    int i = 0, y, j = 0; // UINT
+    UINT i = 0, y, j = 0; // UINT
     int lineHeight = viewer->tm.tmHeight, lineLength;
     int curStrNum = viewer->curStrNum;
+    int subStrNum = 0;
     char* curStr;
     BOOL nextLine;
     GetClientRect(viewer->hwnd, &rc);
-    SelectObject(hdc, viewer->font); // watch docs!
+    SelectObject(hdc, viewer->font);
     if (viewer->mode == CUT_MODE) {
-        for (y = 0; y < rc.bottom && i < model->strNum; y += lineHeight) {
-            if (viewer->horShift >= model->strSizes[curStrNum + i]) {
-                curStr = "";
+        for (y = 0; y < rc.bottom; y += lineHeight) {
+            if (viewer->horShift >= GetStrLen(model, curStrNum + i)) {
+                curStr = NULL;
                 lineLength = 0;
             }
             else {
                 curStr = model->strings[curStrNum + i] + viewer->horShift;
-                lineLength = viewer->lineLength < model->strSizes[curStrNum + i] - viewer->horShift ?
-                viewer->lineLength : model->strSizes[curStrNum + i] - viewer->horShift;
+                lineLength = fmin(viewer->lineLength, GetStrLen(model, curStrNum + i) - viewer->horShift);
             }
             TextOut(hdc, 0, y, curStr, lineLength);
             i++;
         }
     }
     else if (viewer->mode == WRAP_MODE) {
-        for (y = 0; y < rc.bottom && i < model->strNum; y += lineHeight) {
+        for (y = 0; y < rc.bottom && i < model->strNum; i++/*y += lineHeight*/) {
+            lineLength = GetStrLen(model, curStrNum + i);
             curStr = model->strings[curStrNum + i];
-                if (viewer->lineLength < model->strSizes[curStrNum + i] - j * viewer->lineLength) {
-                    lineLength = viewer->lineLength;
-                }
-                else {
-                    lineLength = model->strSizes[curStrNum + i] - j * viewer->lineLength;
-                    nextLine = TRUE;
-                }
-            TextOut(hdc, 0, y, curStr + j * viewer->lineLength, lineLength);
-            if (nextLine) {
-                nextLine = FALSE;
-                j = 0;
-                i++;
+            subStrNum = lineLength / viewer->lineLength;
+            if (lineLength % viewer->lineLength != 0) {
+                subStrNum++;
             }
-            else {
-                j++;
+            for (j = 0; j < subStrNum; j++) {
+                if (y >= rc.bottom) {
+                    break;
+                }
+                lineLength = fmin(viewer->lineLength, GetStrLen(model, curStrNum + i) - j * viewer->lineLength);
+//                if (viewer->lineLength < GetStrLen(model, curStrNum + i) - j * viewer->lineLength) {
+//                    lineLength = viewer->lineLength;
+//                }
+//                else {
+//                    lineLength = GetStrLen(model, curStrNum + i) - j * viewer->lineLength;
+//                    nextLine = TRUE;
+//                }
+                TextOut(hdc, 0, y, curStr + j * viewer->lineLength, lineLength);
+                y += lineHeight;
             }
+
+//            if (nextLine) {
+//                nextLine = FALSE;
+//                j = 0;
+//                i++;
+//            }
+//            else {
+//                j++;
+//            }
+            //i++;
         }
     }
 }
@@ -118,5 +132,6 @@ void ChangeMode(viewer_t* viewer) {
 
 void DeleteViewer(viewer_t* viewer) {
     DeleteObject(viewer->font);
+    //DeleteObject(viewer->bcgrBrush);
     free(viewer);
 }

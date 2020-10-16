@@ -12,7 +12,6 @@
 #include "model.h"
 #include "viewer.h"
 #include "menu.h"
-#include "controller.h"
 
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
@@ -30,11 +29,6 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     MSG messages;            /* Here messages to the application are saved */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
     HBRUSH bcgrBrush = CreateSolidBrush(RGB(255, 255, 255));
-    //HMENU hmenu = LoadMenu(hThisInstance, MAKEINTRESOURCE(IDC_APP1));
-
-//    if (!hmenu) {
-//        printf("Troubles with menu creation\n");
-//    }
 
     /* The Window structure */
     wincl.hInstance = hThisInstance;
@@ -56,8 +50,6 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
         return 0;
-
-    DeleteObject(bcgrBrush);
 
     /* The class is registered, let's create the program*/
     hwnd = CreateWindowEx (
